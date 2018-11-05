@@ -3,11 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AuthorRepository")
  */
-class Author
+class Author implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -17,49 +18,29 @@ class Author
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=180, unique=true)
-     */
-    private $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255)
-     */
-    private $title;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="username", type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=180, unique=true)
      */
     private $username;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=180, unique=true)
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    /**
+     * @ORM\Column(type="string", length=180)
      */
     private $email;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="phone", type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=100)
      */
-    private $phone;
+    private $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="shortbio", type="string", length=255, nullable=true)
+     * @ORM\Column(type="integer")
      */
-    private $shortbio;
-
-    
-
+    private $phone;
 
     public function getId(): ?int
     {
@@ -67,61 +48,16 @@ class Author
     }
 
     /**
-     * Set name
+     * A visual identifier that represents this user.
      *
-     * @param string $name
-     *
-     * @return Author
+     * @see UserInterface
      */
-    public function setName($name)
+    public function getUsername(): string
     {
-        $this->name = $name;
-
-        return $this;
+        return (string) $this->username;
     }
 
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     *
-     * @return Author
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Set username
-     *
-     * @param string $username
-     *
-     * @return Author
-     */
-    public function setUsername($username)
+    public function setUsername(string $username): self
     {
         $this->username = $username;
 
@@ -129,89 +65,82 @@ class Author
     }
 
     /**
-     * Get username
-     *
-     * @return string
+     * @see UserInterface
      */
-    public function getUsername()
+    public function getRoles(): array
     {
-        return $this->username;
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
     }
 
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
 
     /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return Author
+     * @see UserInterface
      */
-    public function setEmail($email)
+    public function getPassword()
+    {
+        // not needed for apps that do not check user passwords
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getSalt()
+    {
+        // not needed for apps that do not check user passwords
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
         return $this;
     }
 
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
+    public function getName(): ?string
     {
-        return $this->email;
+        return $this->name;
     }
 
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
-    /**
-     * Set phone
-     *
-     * @param string $phone
-     *
-     * @return Author
-     */
-    public function setPhone($phone)
+        return $this;
+    }
+
+    public function getPhone(): ?int
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(int $phone): self
     {
         $this->phone = $phone;
 
         return $this;
     }
-
-    /**
-     * Get phone
-     *
-     * @return string
-     */
-    public function getPhone()
-    {
-        return $this->phone;
-    }
-
-
-    /**
-     * Set shortbio
-     *
-     * @param string $shortbio
-     *
-     * @return Author
-     */
-    public function setShortbio($shortbio)
-    {
-        $this->shortbio = $shortbio;
-
-        return $this;
-    }
-
-    /**
-     * Get shortbio
-     *
-     * @return string
-     */
-    public function getShortbio()
-    {
-        return $this->shortbio;
-    }
-
-
 }

@@ -20,9 +20,10 @@ class fixtures extends Fixture
         // TODO: Implement load() method.
         $author = new Author();
         $author
+            ->setUsername('schaki')
             ->setName('Shilpi')
             ->setTitle('Developer')
-            ->setUsername('schaki')
+
             ->setEmail('abc@mail.com')
             ->setPhone('9876543210')
             ->setShortbio('Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\\');
